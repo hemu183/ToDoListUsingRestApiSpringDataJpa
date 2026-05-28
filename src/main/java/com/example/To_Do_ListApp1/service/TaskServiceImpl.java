@@ -36,10 +36,20 @@ public  class TaskServiceImpl implements TaskService {
     }
 
 
+    @Override
     public List<Task> getAllTask() {
-        return taskRepository.findAll();
-    }
 
+        try {
+
+            return taskRepository.findAll();
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+
+            return new ArrayList<>();
+        }
+    }
 
     public Task deleteTask(Task obj) {
          taskRepository.delete(obj);
@@ -47,16 +57,58 @@ public  class TaskServiceImpl implements TaskService {
     }
 
 
+    @Override
     public void updateTask(Task obj) {
-        Optional<Task> task = taskRepository.findById(obj.getId());
-        Task obj1 = task.get();
-        obj1.setStatus(obj.getStatus());
-        taskRepository.save(obj1);
+
+        try {
+
+            Optional<Task> task =
+                    taskRepository.findById(obj.getId());
+
+            if(task.isPresent()) {
+
+                Task obj1 = task.get();
+
+                obj1.setStatus(obj.getStatus());
+
+                taskRepository.save(obj1);
+
+            } else {
+
+                System.out.println("Task not found");
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
     }
 
 
-    public void deleteTaskById(int id) {
-        taskRepository.deleteById(id);
+    @Override
+    public String deleteTaskById(int id) {
+
+        try {
+
+            Optional<Task> task =
+                    taskRepository.findById(id);
+
+            if(task.isPresent()) {
+
+                taskRepository.deleteById(id);
+
+               return  "Task deleted successfully";
+
+            } else {
+
+                return "Task not found";
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return "Error occurred while deleting task";
+        }
     }
 
     @Override

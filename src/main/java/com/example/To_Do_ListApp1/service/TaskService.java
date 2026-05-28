@@ -18,7 +18,7 @@ public interface TaskService {
 
         void updateTask(Task obj);
 
-        void deleteTaskById(int id);
+        String deleteTaskById(int id);
 
         String loaded();
 

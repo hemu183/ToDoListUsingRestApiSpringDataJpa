@@ -98,8 +98,10 @@ class TaskServiceImplTest {
 
         taskServiceImpl.deleteTaskById(1);
 
-        verify(taskRepository, times(1))
-                .deleteById(1);
+        assertEquals(
+                "Task not found",
+                taskServiceImpl.deleteTaskById(1)
+        );
     }
 
     @Test

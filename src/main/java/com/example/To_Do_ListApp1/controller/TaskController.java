@@ -29,7 +29,8 @@ public class TaskController {
         return "Task Added Successfully";
     }
 
-//   View all tasks along with weather details
+
+    // View all tasks along with weather details
     @GetMapping("dashboard")
     public DashboardResponse getDashboard(){
 
@@ -47,13 +48,6 @@ public class TaskController {
         return response;
     }
 
-//    // Fetching all tasks
-//    @GetMapping("Task")
-//    public List<Task> viewAllTasks(){
-//        weatherService.getWeatherDetails("Visakhaptnam");
-//        return taskService.getAllTask();
-//    }
-
 
     //Deleting a Task by task Object
     @DeleteMapping("Task")
@@ -65,8 +59,8 @@ public class TaskController {
     //Deleting a Task by id
     @DeleteMapping("Task/{id}")
     public String deleteTask(@PathVariable  int id){
-        taskService.deleteTaskById(id);
-        return "Deleted Successfully";
+        return taskService.deleteTaskById(id);
+
     }
 
 
