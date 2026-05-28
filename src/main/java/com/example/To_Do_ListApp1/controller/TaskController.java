@@ -1,7 +1,10 @@
 package com.example.To_Do_ListApp1.controller;
 
+import com.example.To_Do_ListApp1.APIResponse.WeatherResponse;
+import com.example.To_Do_ListApp1.DTO.DashboardResponse;
 import com.example.To_Do_ListApp1.model.Task;
-import com.example.To_Do_ListApp1.service.TaskServiceImpl;
+import com.example.To_Do_ListApp1.service.TaskService;
+import com.example.To_Do_ListApp1.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,20 +15,44 @@ import java.util.List;
 public class TaskController {
 
     @Autowired
-    TaskServiceImpl taskService;
+    TaskService taskService;
+
+    @Autowired
+    WeatherService weatherService;
+
+
 
     // Adding a task
     @PostMapping("Task")
-    public void addTask(@RequestBody Task task){
+    public String addTask(@RequestBody Task task){
         taskService.addTask(task);
+        return "Task Added Successfully";
     }
 
+//   View all tasks along with weather details
+    @GetMapping("dashboard")
+    public DashboardResponse getDashboard(){
 
-    // Fetching all tasks
-    @GetMapping("Task")
-    public List<Task> viewAllTasks(){
-        return taskService.getAllTask();
+        List<Task> tasks = taskService.getAllTask();
+
+        WeatherResponse weather =
+                weatherService.getWeatherDetails("Hyderabad");
+
+        DashboardResponse response = new DashboardResponse();
+
+        response.setTasks(tasks);
+
+        response.setWeather(weather);
+
+        return response;
     }
+
+//    // Fetching all tasks
+//    @GetMapping("Task")
+//    public List<Task> viewAllTasks(){
+//        weatherService.getWeatherDetails("Visakhaptnam");
+//        return taskService.getAllTask();
+//    }
 
 
     //Deleting a Task by task Object
@@ -38,7 +65,7 @@ public class TaskController {
     //Deleting a Task by id
     @DeleteMapping("Task/{id}")
     public String deleteTask(@PathVariable  int id){
-        taskService.deleteTaskByid(id);
+        taskService.deleteTaskById(id);
         return "Deleted Successfully";
     }
 
@@ -48,6 +75,12 @@ public class TaskController {
     public String updateStatus(@RequestBody Task obj){
         taskService.updateTask(obj);
         return "Updated Successfully";
+    }
+
+    //Replace or update entire task
+    @PutMapping("Task/{id}")
+    public Task updateTask(@PathVariable int id, @RequestBody Task task){
+        return taskService.updateTaskById(id, task);
     }
 
 
